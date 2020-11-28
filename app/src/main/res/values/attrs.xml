@@ -2,5 +2,7 @@
 <resources>
     <declare-styleable name="DemoView">
         <attr name="label" format="string" />
+        <attr name="radioButton" format="string" />
+        <attr name="checkBox" format="string" />
     </declare-styleable>
 </resources>

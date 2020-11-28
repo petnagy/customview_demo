@@ -23,7 +23,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                app:label="Demo1" />
+                app:checkBox="CheckBox1"
+                app:label="Demo1"
+                app:radioButton="Radio1" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -32,21 +34,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:label="Demo2" />
+            app:checkBox="CheckBox2"
+            app:label="Demo2"
+            app:radioButton="Radio2" />
 
         <com.petnagy.customviewdemo.common.DemoView
             android:id="@+id/demoDemo3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:label="Demo3" />
+            app:checkBox="CheckBox3"
+            app:label="Demo3"
+            app:radioButton="Radio3" />
 
         <com.petnagy.customviewdemo.common.DemoView
             android:id="@+id/demoDemo4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            app:label="Demo4" />
+            app:checkBox="CheckBox4"
+            app:label="Demo4"
+            app:radioButton="Radio4" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/demoButton"
