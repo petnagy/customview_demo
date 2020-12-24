@@ -1,6 +1,7 @@
 package com.petnagy.customviewdemo.common
 
 import android.content.Context
+import android.os.Parcel
 import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -51,6 +52,11 @@ class DemoView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 demoRadio.callOnClick()
             }
         }
+
+        // Solve the problem of the don't keep activity's problem however constraints will be wrong
+//        demoRadio.id = View.generateViewId()
+//        demoCheckBox.id = View.generateViewId()
+//        demoInputField.id = View.generateViewId()
     }
 
     fun setRadioButton(checked: Boolean) {
@@ -86,5 +92,64 @@ class DemoView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
     }
 
     @Parcelize
-    data class DemoViewState(val radioButtonChecked: Boolean, val checkBoxChecked: Boolean, val text: String): Parcelable
+    data class DemoViewState(val radioButtonChecked: Boolean, val checkBoxChecked: Boolean, val text: String) : Parcelable
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val superState = super.onSaveInstanceState()
+        return if (superState != null) {
+            val savedState = SavedState(superState)
+            savedState.radioButtonState = demoRadio.isChecked
+            savedState.checkBoxState = demoCheckBox.isChecked
+            savedState.text = demoInputField.text.toString()
+            savedState
+        } else {
+            null
+        }
+    }
+
+    public override fun onRestoreInstanceState(state: Parcelable) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+            demoRadio.isChecked = state.radioButtonState
+            demoCheckBox.isChecked = state.checkBoxState
+            demoInputField.setText(state.text)
+        } else {
+            super.onRestoreInstanceState(state)
+        }
+    }
+
+    internal class SavedState : BaseSavedState {
+
+        var radioButtonState: Boolean = false
+        var checkBoxState: Boolean = false
+        var text: String = ""
+
+        constructor(source: Parcel) : super(source) {
+            radioButtonState = source.readByte().toInt() != 0
+            checkBoxState = source.readByte().toInt() != 0
+            text = source.readString() ?: ""
+        }
+
+        constructor(superState: Parcelable) : super(superState)
+
+        override fun writeToParcel(out: Parcel, flags: Int) {
+            super.writeToParcel(out, flags)
+            out.writeByte((if (radioButtonState) 1 else 0).toByte())
+            out.writeByte((if (checkBoxState) 1 else 0).toByte())
+            out.writeString(text)
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR = object : Parcelable.Creator<SavedState> {
+                override fun createFromParcel(source: Parcel): SavedState {
+                    return SavedState(source)
+                }
+
+                override fun newArray(size: Int): Array<SavedState?> {
+                    return arrayOfNulls(size)
+                }
+            }
+        }
+    }
 }
